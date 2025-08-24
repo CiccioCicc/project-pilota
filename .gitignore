@@ -1,5 +1,35 @@
-.venv/
+# OS
+.DS_Store
+Thumbs.db
+
+# Node/Playwright
+node_modules/
+dist/
+playwright-report/
+test-results/
+
+# Python/Locust
 __pycache__/
 *.pyc
-reports/
-.playwright/
+*.pyo
+.venv/
+.venv*/
+.env
+.env.*
+
+# Coverage/Reports
+coverage/
+*.log
+logs/
+*.csv
+output/
+
+# Docker
+*.pid
+**/.docker/*
+docker-data/
+
+# IDE
+.vscode/
+.idea/
+
