@@ -1,0 +1,39 @@
+{
+    "id": null,
+    "title": "Locust Overview",
+    "schemaVersion": 36,
+    "version": 1,
+    "refresh": "5s",
+    "panels": [
+        {
+            "type": "stat",
+            "title": "Users",
+            "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+            "targets": [{"expr": "locust_users"}]
+        },
+        {
+            "type": "stat",
+            "title": "Current RPS",
+            "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+            "targets": [{"expr": "locust_current_rps"}]
+        },
+        {
+            "type": "stat",
+            "title": "Fail Ratio",
+            "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+            "targets": [{"expr": "locust_fail_ratio"}]
+        },
+        {
+            "type": "graph",
+            "title": "Requests/s",
+            "gridPos": {"x": 0, "y": 4, "w": 12, "h": 8},
+            "targets": [{"expr": "rate(locust_requests_total[1m])"}]
+        },
+        {
+            "type": "graph",
+            "title": "Response Time p95 (ms)",
+            "gridPos": {"x": 12, "y": 4, "w": 12, "h": 8},
+            "targets": [{"expr": "locust_response_time_percentile{percentile=\"0.95\"}"}]
+        }
+    ]
+}

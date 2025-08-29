@@ -1,0 +1,61 @@
+services:
+  locust-ui:
+    image: locustio/locust:2.31.4
+    working_dir: /mnt/locust
+    command: >
+      locust -f locustfile.py 
+            --class-picker
+            --web-port 8089 
+            --host https://jsonplaceholder.typicode.com
+    volumes:
+      - ./locust_files:/mnt/locust
+      - ./reports:/mnt/reports
+    ports:
+      - "8089:8089"
+
+  locust-runner:
+    image: locustio/locust:2.31.4
+    working_dir: /mnt/locust
+    command: >
+      locust -f locustfile.py --headless -u 25 -r 5 -t 1m
+             --host https://jsonplaceholder.typicode.com
+             --csv=/mnt/reports/locust_run --csv-full-history
+    volumes:
+      - ./locust_files:/mnt/locust
+      - ./reports:/mnt/reports
+    depends_on:
+      - locust-ui
+
+  locust-exporter:
+    image: containersol/locust_exporter:latest
+    environment:
+      - LOCUST_EXPORTER_URI=http://locust-ui:8089
+    ports:
+      - "9646:9646"
+    depends_on:
+      - locust-ui
+
+
+  prometheus:
+    image: prom/prometheus
+    command: --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - TZ=Europe/Rome
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+
+volumes:
+  grafana_data:
