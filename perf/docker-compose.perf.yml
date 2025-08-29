@@ -2,8 +2,11 @@ services:
   locust-ui:
     image: locustio/locust:2.31.4
     working_dir: /mnt/locust
+    environment:
+      - LOCUST_USER_CLASSES=
+      - LOCUST_CLASSES=
     command: >
-      locust -f locustfile.py 
+            -f locustfile.py 
             --class-picker
             --web-port 8089 
             --host https://jsonplaceholder.typicode.com
@@ -17,7 +20,7 @@ services:
     image: locustio/locust:2.31.4
     working_dir: /mnt/locust
     command: >
-      locust -f locustfile.py --headless -u 25 -r 5 -t 1m
+             -f locustfile.py --headless -u 25 -r 5 -t 1m
              --host https://jsonplaceholder.typicode.com
              --csv=/mnt/reports/locust_run --csv-full-history
     volumes:
